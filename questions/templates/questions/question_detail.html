@@ -1,0 +1,93 @@
+{% comment %} <!-- templates/questions/question_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ question.title }}</title>
+</head>
+<body>
+    <h1>{{ question.title }}</h1>
+    <p>{{ question.content }}</p>
+    <p><strong>Asked by:</strong> {{ question.user.username }} | <strong>Posted on:</strong> {{ question.created_at }}</p>
+
+    <h2>Answers</h2>
+
+    {% if answers %}
+        {% for answer in answers %}
+            <div>
+                <p><strong>{{ answer.user.username }} answered:</strong> {{ answer.content }}</p>
+                <p><em>Posted on: {{ answer.created_at }}</em></p>
+                <p>Likes: {{ answer.likes.count }}</p>
+
+                <!-- Like or Unlike the answer -->
+                <form method="POST" action="{% url 'like_answer' answer.id %}">
+                    {% csrf_token %}
+                    <button type="submit">{% if user in answer.likes.all %}Unlike{% else %}Like{% endif %}</button>
+                </form>
+                <hr>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No answers yet. Be the first to answer!</p>
+    {% endif %} {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ question.title }}</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Log out</button>
+    </form>
+{% else %}
+    <a href="{% url 'login' %}">Log in</a>
+{% endif %}
+
+    <h1>{{ question.title }}</h1>
+    <p>{{ question.content }}</p>
+    <p><strong>Asked by:</strong> {{ question.user.username }} | <strong>Posted on:</strong> {{ question.created_at }}</p>
+
+    <h2>Answers</h2>
+
+    {% if answers %}
+        {% for answer in answers %}
+            <div>
+                <p><strong>{{ answer.user.username }} answered:</strong> {{ answer.content }}</p>
+                <p><em>Posted on: {{ answer.created_at }}</em></p>
+                <p>Likes: {{ answer.likes.count }}</p>
+
+                <form method="POST" action="{% url 'like_answer' answer.id %}">
+                    {% csrf_token %}
+                    <button type="submit">
+                        {% if answer.is_liked_by_user %}Unlike{% else %}Like{% endif %}
+                    </button>
+                </form>
+                <hr>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No answers yet. Be the first to answer!</p>
+    {% endif %}
+
+    <h2>Your Answer</h2>
+
+{% if user.is_authenticated %}
+    <form method="POST" action="{% url 'post_answer' question.id %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Answer</button>
+    </form>
+{% else %}
+    <p><a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to post an answer.</p>
+{% endif %}
+
+
+</body>
+</html>

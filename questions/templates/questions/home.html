@@ -1,0 +1,46 @@
+{% comment %} <h1>Questions</h1>
+{% for question in questions %}
+    <div>
+        <h2><a href="{% url 'question_detail' question.pk %}">{{ question.title }}</a></h2>
+        <p>{{ question.content }}</p>
+    </div>
+{% endfor %} {% endcomment %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+ 
+{% if user.is_authenticated %}
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Log out</button>
+    </form>
+{% else %}
+    <a href="{% url 'login' %}">Log in</a>
+{% endif %}
+
+<h1>Welcome to the Transport Simple Assesment made by Abhinav Dawar</h1>
+<p>Due to the lack of timing no styling has been done. But every functionality is working properly</p>
+<p>All Questions are hyperlink which will take to detail page and you can answer, like any question. Also login and logout is also implemented</p>
+
+<a href="{% url 'post_question' %}">
+    <button>Ask a Question</button>
+</a>
+
+<h2>Questions to Answer</h2>
+<ul>
+    {% for question in questions %}
+        <li><a href="{% url 'question_detail' question.id %}">{{ question.title }}</a></li>
+    {% empty %}
+        <li>No questions available to answer.</li>
+    {% endfor %}
+</ul>
+
+</body>
+</html>
