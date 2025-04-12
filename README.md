@@ -15,7 +15,7 @@ It has all the asked functionalities such as:-
   5) Like an Answer
 
 Also, For the sake of simplicity I have deployed this webapp on webserver to easily access.
-URL - https://transport-simple-assignment-ehtf4qcpa-abhinavdawars-projects.vercel.app/
+URL - https://transport-simple-assignment.vercel.app/
 
 Please navigate to this URL and access the webapp.
 Thanks !!
